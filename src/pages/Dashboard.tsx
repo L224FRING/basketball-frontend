@@ -206,8 +206,8 @@ const Dashboard: React.FC = () => {
                 recentGames.map((game) => (
                   <div key={game._id} className="game-item">
                     <div className="game-teams">
-                      <span className="team">{game.homeTeam}</span>
-                      <span className="score">{game.homeScore} - {game.awayScore}</span>
+                      <span className="team">{game.homeTeam.name}</span>
+                      <span className="score">{game.homeScore.name} - {game.awayScore}</span>
                       <span className="team">{game.awayTeam}</span>
                     </div>
                     <div className="game-meta">
@@ -233,7 +233,7 @@ const Dashboard: React.FC = () => {
                     <div className="player-rank">#{index + 1}</div>
                     <div className="player-info">
                       <h4>{player.name}</h4>
-                      <p>{player.team} • {player.position}</p>
+                      <p>{player.team.name} • {player.position}</p>
                     </div>
                     <div className="player-stats">
                       <span className="ppg">{player.stats.pointsPerGame.toFixed(1)} PPG</span>
