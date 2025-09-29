@@ -2,6 +2,7 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .navbar-container {
@@ -11,6 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .navbar-brand {
@@ -29,6 +31,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+  transition: max-height 0.3s ease;
 }
 
 .navbar-link {
@@ -89,20 +92,51 @@
   gap: 1rem;
 }
 
+/* Hamburger toggle */
+.navbar-toggle {
+  display: none;
+  font-size: 1.5rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile Styles */
 @media (max-width: 768px) {
-  .navbar-container {
-    flex-direction: column;
-    gap: 1rem;
+  .navbar-toggle {
+    display: block;
   }
-  
+
   .navbar-menu {
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
   }
-  
+
+  .navbar-menu.active {
+    max-height: 500px; /* Enough to show all links */
+  }
+
   .navbar-user {
     flex-direction: column;
     gap: 0.5rem;
+    width: 100%;
+  }
+
+  .navbar-auth {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .navbar-link,
+  .navbar-logout,
+  .navbar-register {
+    width: 100%;
+    text-align: center;
   }
 }
 
