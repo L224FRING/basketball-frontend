@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Players from './pages/Players';
-import Games from './pages/Games';
-import Teams from './pages/Teams';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
+import Home from './pages/Home/Home';
+import Players from './pages/Players/Players';
+import Games from './pages/Games/Games';
+import Teams from './pages/Teams/Teams';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {

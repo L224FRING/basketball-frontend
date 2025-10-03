@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { gamesAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { gamesAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import './Games.css';
+import { Game } from '../../types/game';
 
-interface Game {
-  _id: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeScore: number;
-  awayScore: number;
-  gameDate: string;
-  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
-  quarter: number;
-  timeRemaining: string;
-  venue?: string;
-  attendance?: number;
-}
 
 const Games: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -61,7 +49,7 @@ const Games: React.FC = () => {
     });
   };
 
-    const handleCreateTeam = async (gameData: any) => {
+    const handleCreateGame = async (gameData: any) => {
     try {
       await gamesAPI.createGame(gameData);
       fetchGames();
@@ -157,12 +145,12 @@ const Games: React.FC = () => {
               <div className="game-header">
                 <div className="game-teams">
                   <div className="team">
-                    <span className="team-name">{game.homeTeam}</span>
+                    <span className="team-name">{game.homeTeam.name}</span>
                     <span className="team-score">{game.homeScore}</span>
                   </div>
                   <div className="vs">VS</div>
                   <div className="team">
-                    <span className="team-name">{game.awayTeam}</span>
+                    <span className="team-name">{game.awayTeam.name}</span>
                     <span className="team-score">{game.awayScore}</span>
                   </div>
                 </div>
@@ -191,7 +179,7 @@ const Games: React.FC = () => {
                 {game.status === 'in_progress' && (
                   <div className="info-item">
                     <span className="label">Quarter:</span>
-                    <span className="value">{game.quarter}</span>
+                    <span className="value">{game.quater}</span>
                   </div>
                 )}
                 {game.status === 'in_progress' && (
