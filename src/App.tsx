@@ -9,6 +9,7 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/AuthContext';
+import Player from './pages/Players/Player';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/players" element={<Players />} />
+              <Route path="/players/:id" element={<Player />}></Route>
               <Route path="/games" element={<Games />} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/login" element={<Login />} />

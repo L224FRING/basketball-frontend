@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { gamesAPI } from '../../services/api';
+import { gamesAPI, teamsAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import './Games.css';
 import { Game } from '../../types/game';
-
+import { Team } from '../../types/team';
+import { GameForm } from './GameForm';
 
 const Games: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
@@ -16,9 +18,10 @@ const Games: React.FC = () => {
   });
   const [showCreateForm, setShowCreateForm] = useState(false);
   const { user } = useAuth();
-
+  const [editingGame, setEditingGame] = useState<Game | null>(null);
   useEffect(() => {
     fetchGames();
+    fetchTeams();
   }, [filters]);
 
   const fetchGames = async () => {
@@ -31,6 +34,16 @@ const Games: React.FC = () => {
       console.error('Error fetching games:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  const fetchTeams = async () => {
+    try {
+      const response = await teamsAPI.getTeams();
+      setTeams(response.data.data);
+    } catch (err: any) {
+      console.error('Error fetching teams:', err);
     }
   };
 
@@ -49,18 +62,40 @@ const Games: React.FC = () => {
     });
   };
 
-    const handleCreateGame = async (gameData: any) => {
+  const handleCreateGame = async (gameData: any) => {
     try {
       await gamesAPI.createGame(gameData);
       fetchGames();
       setShowCreateForm(false);
     } catch (error: any) {
-      console.error('Error creating team:', error);
-      alert(error.response?.data?.message || 'Failed to create team');
+      console.error('Error creating Game:', error);
+      alert(error.response?.data?.message || 'Failed to create game');
     }
   };
 
 
+  const handleUpdateGame = async (gameId: string, gameData: any) => {
+    try {
+      await gamesAPI.updateGame(gameId, gameData);
+      fetchGames();
+      setEditingGame(null);
+    } catch (error: any) {
+      console.error('Error updating game:', error);
+      alert(error.response?.data?.message || 'Failed to update game');
+    }
+  };
+
+  const handleDeleteGame = async (gameId: string) => {
+    if (window.confirm('Are you sure you want to delete this game?')) {
+      try {
+        await gamesAPI.deleteGame(gameId);
+        fetchGames();
+      } catch (error: any) {
+        console.error('Error deleting player:', error);
+        alert(error.response?.data?.message || 'Failed to delete game');
+      }
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -97,10 +132,28 @@ const Games: React.FC = () => {
         <div className="games-header">
           <h1>Games</h1>
           {user && (user.role === 'admin' || user.role === 'coach') && (
-            <button className="btn btn-primary">Add Game</button>
+            <button className="btn btn-primary" onClick={()=>setShowCreateForm(true)} >Add Game</button>
+              
           )}
         </div>
 
+
+        {showCreateForm && (
+          <GameForm
+            teams={teams}
+            onSubmit={handleCreateGame}
+            onCancel={() => setShowCreateForm(false)}
+          />
+        )}
+
+        {editingGame && (
+          <GameForm
+            game={editingGame}
+            teams={teams}
+            onSubmit={(data) => handleUpdateGame(editingGame._id, data)}
+            onCancel={() => setEditingGame(null)}
+          />
+        )}
         <div className="filters">
           <select
             name="status"
@@ -197,10 +250,10 @@ const Games: React.FC = () => {
                     <button className="btn btn-sm btn-primary">Start Game</button>
                   )}
                   {game.status === 'in_progress' && (
-                    <button className="btn btn-sm btn-success">Update Score</button>
+                    <button className="btn btn-sm btn-success" onClick={()=>setEditingGame(game)}>Update Score</button>
                   )}
-                  {user.role === 'admin' && (
-                    <button className="btn btn-sm btn-danger">Delete</button>
+                  {(
+                    <button className="btn btn-sm btn-danger" onClick={()=>handleDeleteGame(game._id)}>Delete</button>
                   )}
                 </div>
               )}
