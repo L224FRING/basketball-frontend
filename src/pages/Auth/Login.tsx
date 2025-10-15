@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 
     try {
       await login(formData.email, formData.password);
-      navigate('/dashboard');
+      navigate('/players');
     } catch (err: any) {
       setError(err.message);
     } finally {

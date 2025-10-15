@@ -20,7 +20,6 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="hero-actions">
-              <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>
             </div>
           )}
         </div>

@@ -43,7 +43,7 @@ const Register: React.FC = () => {
     try {
       const { confirmPassword, ...userData } = formData;
       await register(userData);
-      navigate('/dashboard');
+      navigate('/players');
     } catch (err: any) {
       setError(err.message);
     } finally {

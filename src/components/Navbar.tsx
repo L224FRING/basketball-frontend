@@ -34,7 +34,6 @@ const Navbar: React.FC = () => {
 
           {user ? (
             <div className="navbar-user">
-              <Link to="/dashboard" className="navbar-link">Dashboard</Link>
               <span className="navbar-user-info">
                 Welcome, {user.name} ({user.role})
               </span>

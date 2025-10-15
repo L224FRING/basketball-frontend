@@ -3,10 +3,12 @@ import { gamesAPI, teamsAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import './Games.css';
 import { Game } from '../../types/game';
+import { useNavigate } from 'react-router-dom';
 import { Team } from '../../types/team';
 import { GameForm } from './GameForm';
 
 const Games: React.FC = () => {
+  const navigate = useNavigate();
   const [games, setGames] = useState<Game[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
@@ -242,21 +244,61 @@ const Games: React.FC = () => {
                   </div>
                 )}
               </div>
+                {user && (
+                  <div className="game-actions">
+                    {/* Admin / coach actions */}
+                    {(user.role === 'admin' || user.role === 'coach') && (
+                      <>
+                        <button className="btn btn-sm btn-secondary" onClick={() => setEditingGame(game)}>Edit</button>
 
-              {user && (user.role === 'admin' || user.role === 'coach') && (
-                <div className="game-actions">
-                  <button className="btn btn-sm btn-secondary">Edit</button>
-                  {game.status === 'scheduled' && (
-                    <button className="btn btn-sm btn-primary">Start Game</button>
-                  )}
-                  {game.status === 'in_progress' && (
-                    <button className="btn btn-sm btn-success" onClick={()=>setEditingGame(game)}>Update Score</button>
-                  )}
-                  {(
-                    <button className="btn btn-sm btn-danger" onClick={()=>handleDeleteGame(game._id)}>Delete</button>
-                  )}
-                </div>
-              )}
+                        {game.status === 'scheduled' && (
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => {
+                              handleUpdateGame(game._id, { status: 'in_progress' });
+                              navigate(`/games/${game._id}`);
+                            }}
+                          >
+                            Start Game
+                          </button>
+                        )}
+
+                        {game.status === 'in_progress' && (
+                          <button
+                            className="btn btn-sm btn-warning"
+                            onClick={() => setEditingGame(game)}
+                          >
+                            Update Game
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    {/* View buttons for anyone */}
+                    {(game.status === 'in_progress' || game.status === 'completed') && (
+                      <button
+                        className={`btn btn-sm ${game.status === 'completed' ? 'btn-info' : 'btn-success'}`}
+                        onClick={() => navigate(`/games/${game._id}`)}
+                      >
+                        {game.status === 'completed' ? 'View Game' : 'Live Game'}
+                      </button>
+                    )}
+
+                    {/* Cancelled games */}
+                    {game.status === 'cancelled' && <span className="text-muted">Cancelled</span>}
+
+                    {/* Delete for admin/coach */}
+                    {(user.role === 'admin' || user.role === 'coach') && (
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => handleDeleteGame(game._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                )}
+
             </div>
           ))}
         </div>
