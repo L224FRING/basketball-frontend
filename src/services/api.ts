@@ -60,6 +60,7 @@ export const gamesAPI = {
   createGame: (gameData: any) => api.post('/api/games', gameData),
   updateGame: (id: string, gameData: any) => api.put(`/api/games/${id}`, gameData),
   updateScore: (id: string, scoreData: any) => api.put(`/api/games/${id}/score`, scoreData),
+  scoreEvent: (id: string, eventData: any) => api.post(`/api/games/${id}/score-event`, eventData),
   deleteGame: (id: string) => api.delete(`/api/games/${id}`),
 };
 

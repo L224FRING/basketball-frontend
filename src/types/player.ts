@@ -18,5 +18,7 @@ export interface Player {
     stealsPerGame: number;
     blocksPerGame: number;
   };
+  // cumulative career/season points (keeps in sync with server Player.points)
+  points?: number;
   isActive: boolean;
 }

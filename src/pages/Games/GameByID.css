@@ -206,3 +206,47 @@
   }
 }
 
+/* Scorer controls */
+.scorer-controls {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.scorer-label {
+  color: #dfe7ff;
+  font-weight: 600;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.scorer-select {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: #fff;
+}
+
+.score-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.score-buttons button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff914d 0%, #ff7b22 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.score-buttons button:hover { transform: translateY(-2px); }
+

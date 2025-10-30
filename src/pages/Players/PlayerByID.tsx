@@ -57,6 +57,11 @@ const PlayerByID: React.FC = () => {
         {/* Stats */}
         <h2 className="stats-title">Player Stats</h2>
         <div className="player-stats">
+          <div className="stat-box">
+            <p className="stat-key">Total Points</p>
+            <p className="stat-value">{player.points ?? 0}</p>
+          </div>
+
           {Object.entries(player.stats).map(([key, value]) => (
             <div key={key} className="stat-box">
               <p className="stat-key">

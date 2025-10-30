@@ -219,9 +219,14 @@ const Players: React.FC = () => {
             >
               <div>
                 <h3 className="font-bold">{player.name}</h3>
-                <span className="text-sm text-gray-500">
-                  {player.team?.name || "No Team"}
-                </span>
+                <div style={{display: 'flex', gap: '0.75rem', alignItems: 'center'}}>
+                  <span className="text-sm text-gray-500">
+                    {player.team?.name || "No Team"}
+                  </span>
+                  <span className="text-sm" style={{color: '#ffd166', fontWeight: 600}}>
+                    PTS: {player.points ?? 0}
+                  </span>
+                </div>
               </div>
 
               {/* Drop arrow (rotates when open) */}
@@ -264,6 +269,7 @@ const Players: React.FC = () => {
                 <div className="player-stats">
                   <h4 className="font-semibold mt-2">Season Stats</h4>
                   <div className="grid grid-cols-2 gap-2">
+                    <div>Total PTS: {player.points ?? 0}</div>
                     <div>PPG: {player.stats.pointsPerGame.toFixed(1)}</div>
                     <div>RPG: {player.stats.reboundsPerGame.toFixed(1)}</div>
                     <div>APG: {player.stats.assistsPerGame.toFixed(1)}</div>
