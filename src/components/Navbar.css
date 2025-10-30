@@ -1,46 +1,54 @@
-/* Import sporty, modern font */
+/* ---------------------------------------------------
+   🏀 BASKETBALL APP NAVBAR — Compact Sporty Version
+   --------------------------------------------------- */
+
+/* Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
 
 .navbar {
   background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 70%, #ff7b22 100%);
-  padding: 1rem 0.75rem;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-  position: relative;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   font-family: 'Poppins', sans-serif;
   letter-spacing: 0.5px;
-  z-index: 100;
+  position: sticky;
+  top: 0;
+  z-index: 200;
 }
 
+/* Container */
 .navbar-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: nowrap; /* ❌ prevent wrapping */
-  gap: 1rem;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  min-width: 0;
+  gap: 0.75rem;
 }
 
 /* Brand */
 .navbar-brand {
   flex-shrink: 0;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #ffb36b;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: relative;
   transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .navbar-brand::after {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: -3px;
   left: 0;
   width: 40%;
-  height: 3px;
+  height: 2px;
   background: #ff914d;
   border-radius: 2px;
   transition: width 0.3s ease;
@@ -59,22 +67,25 @@
 .navbar-menu {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  flex: 1; /* allow it to take remaining space */
   justify-content: flex-end;
-  transition: max-height 0.3s ease;
+  flex: 1 1 auto;
+  gap: 1.2rem;
+  min-width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-/* Links */
+/* Links (Dashboard, Players, Teams, Games, etc.) */
 .navbar-link {
   color: #e2e8f0;
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
   position: relative;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .navbar-link::after {
@@ -83,83 +94,92 @@
   bottom: 0;
   left: 50%;
   width: 0%;
-  height: 3px;
+  height: 2px;
   background-color: #ff7b22;
-  transition: all 0.3s ease;
   transform: translateX(-50%);
+  transition: all 0.3s ease;
 }
 
 .navbar-link:hover {
   color: #ffb36b;
+  transform: scale(1.05);
 }
 
 .navbar-link:hover::after {
-  width: 60%;
+  width: 50%;
 }
 
-/* Buttons */
+/* Register Button */
 .navbar-register {
   background: linear-gradient(135deg, #ff914d 0%, #ff7b22 100%);
   color: white;
   border: none;
   font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 5px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 145, 77, 0.4);
+  box-shadow: 0 3px 10px rgba(255, 145, 77, 0.4);
+  font-size: 0.9rem;
 }
 
 .navbar-register:hover {
   background: linear-gradient(135deg, #ff7b22 0%, #ff914d 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 145, 77, 0.5);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 5px 16px rgba(255, 145, 77, 0.6);
 }
 
+/* Logout Button */
 .navbar-logout {
   background-color: #e63946;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+  box-shadow: 0 3px 10px rgba(230, 57, 70, 0.3);
+  font-size: 0.9rem;
 }
 
 .navbar-logout:hover {
   background-color: #c92a36;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(230, 57, 70, 0.4);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 5px 14px rgba(230, 57, 70, 0.5);
 }
 
-/* User section */
+/* User Section */
 .navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.navbar-user-info {
+  color: #ffb36b;
+  font-size: 0.8rem;
+  background-color: rgba(255, 145, 77, 0.15);
+  padding: 0.35rem 0.75rem;
+  border-radius: 5px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 150px;
+}
+
+/* Auth Section */
+.navbar-auth {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.navbar-user-info {
-  color: #ffb36b;
-  font-size: 0.9rem;
-  background-color: rgba(255, 145, 77, 0.15);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-/* Auth section */
-.navbar-auth {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-
-/* Hamburger */
+/* Hamburger (Mobile) */
 .navbar-toggle {
   display: none;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: #ffb36b;
   background: none;
   border: none;
@@ -172,12 +192,71 @@
   color: #ffdcb2;
 }
 
-/* Mobile */
+/* --- RESPONSIVE --- */
+
+/* Mid screens (reduce spacing even more) */
+@media (max-width: 1150px) {
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.3rem;
+  }
+
+  .navbar-menu {
+    gap: 0.9rem;
+  }
+
+  .navbar-link {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .navbar-register,
+  .navbar-logout {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .navbar-user-info {
+    font-size: 0.75rem;
+    max-width: 120px;
+  }
+}
+
+/* Tighten before mobile */
+@media (max-width: 900px) {
+  .navbar-menu {
+    gap: 0.7rem;
+  }
+
+  .navbar-link {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .navbar-register,
+  .navbar-logout {
+    font-size: 0.8rem;
+  }
+
+  .navbar-user-info {
+    max-width: 100px;
+  }
+}
+
+/* Mobile Menu */
 @media (max-width: 768px) {
   .navbar-container {
-    flex-wrap: wrap; /* ✅ allow wrapping only on small screens */
+    flex-wrap: wrap;
     padding: 0 1rem;
   }
+
   .navbar-toggle {
     display: block;
   }
@@ -189,10 +268,11 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 80%, #ff7b22 100%);
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 85%, #ff7b22 100%);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     padding-top: 1rem;
   }
+
   .navbar-menu.active {
     max-height: 500px;
   }
@@ -207,8 +287,12 @@
   .navbar-user,
   .navbar-auth {
     flex-direction: column;
-    gap: 0.75rem;
     width: 100%;
+    gap: 0.6rem;
+  }
+
+  .navbar-user-info {
+    max-width: 100%;
   }
 }
 

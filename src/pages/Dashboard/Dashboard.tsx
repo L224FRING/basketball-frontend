@@ -1,277 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { playersAPI, gamesAPI } from '../../services/api';
 import './Dashboard.css';
-
-interface DashboardStats {
-  totalPlayers: number;
-  activePlayers: number;
-  totalGames: number;
-  upcomingGames: number;
-  completedGames: number;
-}
+import { useAuth } from '../../context/AuthContext';
+import { playersAPI, teamsAPI, gamesAPI } from '../../services/api';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalPlayers: 0,
-    activePlayers: 0,
-    totalGames: 0,
-    upcomingGames: 0,
-    completedGames: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [recentGames, setRecentGames] = useState<any[]>([]);
-  const [topPlayers, setTopPlayers] = useState<any[]>([]);
+  const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const handleCopyId = async () => {
+    if (!user?.id) return;
     try {
-      setLoading(true);
-      
-      // Fetch players data
-      const playersResponse = await playersAPI.getPlayers();
-      const players = playersResponse.data.data;
-      
-      // Fetch games data
-      const gamesResponse = await gamesAPI.getGames();
-      const games = gamesResponse.data.data;
-      
-      // Calculate stats
-      const totalPlayers = players.length;
-      const activePlayers = players.filter((p: any) => p.isActive).length;
-      const totalGames = games.length;
-      const upcomingGames = games.filter((g: any) => g.status === 'scheduled').length;
-      const completedGames = games.filter((g: any) => g.status === 'completed').length;
-      
-      setStats({
-        totalPlayers,
-        activePlayers,
-        totalGames,
-        upcomingGames,
-        completedGames
-      });
-      
-      // Get recent games (last 5)
-      const sortedGames = games
-        .sort((a: any, b: any) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime())
-        .slice(0, 5);
-      setRecentGames(sortedGames);
-      
-      // Get top players by points per game
-      const sortedPlayers = players
-        .filter((p: any) => p.isActive)
-        .sort((a: any, b: any) => b.stats.pointsPerGame - a.stats.pointsPerGame)
-        .slice(0, 5);
-      setTopPlayers(sortedPlayers);
-      
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
+      await navigator.clipboard.writeText(user.id);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Copy failed', err);
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const [teamsCount, setTeamsCount] = useState<number | null>(null);
+  const [playersCount, setPlayersCount] = useState<number | null>(null);
+  const [gamesCount, setGamesCount] = useState<number | null>(null);
 
-  if (loading) {
-    return (
-      <div className="dashboard-container">
-        <div className="loading">Loading dashboard...</div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const [pRes, tRes, gRes] = await Promise.all([
+          playersAPI.getPlayers(),
+          teamsAPI.getTeams(),
+          gamesAPI.getGames(),
+        ]);
+
+        const pData = pRes.data?.data ?? pRes.data ?? [];
+        const tData = tRes.data?.data ?? tRes.data ?? [];
+        const gData = gRes.data?.data ?? gRes.data ?? [];
+
+        setPlayersCount(Array.isArray(pData) ? pData.length : 0);
+        setTeamsCount(Array.isArray(tData) ? tData.length : 0);
+        setGamesCount(Array.isArray(gData) ? gData.length : 0);
+      } catch (err) {
+        console.error('Failed to fetch dashboard counts', err);
+        setPlayersCount(0);
+        setTeamsCount(0);
+        setGamesCount(0);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   return (
-    <div className="dashboard-container">
-      <div className="container">
-        <div className="dashboard-header">
-          <h1>Dashboard</h1>
-          <p>Welcome back, {user?.name}!</p>
-        </div>
-
-        {/* User Profile Section */}
-        <div className="user-profile-section">
-          <h2>Your Profile</h2>
-          <div className="profile-card">
-            <div className="profile-info">
-              <div className="profile-item">
-                <span className="label">Name:</span>
-                <span className="value">{user?.name}</span>
-              </div>
-              <div className="profile-item">
-                <span className="label">Email:</span>
-                <span className="value">{user?.email}</span>
-              </div>
-              <div className="profile-item">
-                <span className="label">Role:</span>
-                <span className="value role-badge">{user?.role}</span>
-              </div>
-              <div className="profile-item">
-                <span className="label">User ID:</span>
-                <div className="user-id-container">
-                  <span className="user-id">{user?.id}</span>
-                  <button 
-                    className="copy-btn"
-                    onClick={() => {
-                      navigator.clipboard.writeText(user?.id || '');
-                      alert('User ID copied to clipboard!');
-                    }}
-                    title="Copy User ID"
-                  >
-                    📋 Copy
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Instructions for Players */}
-          {user?.role === 'player' && (
-            <div className="player-instructions">
-              <h3>How to Join a Team</h3>
-              <div className="instructions-content">
-                <p>To join a team, follow these steps:</p>
-                <ol>
-                  <li>Copy your User ID above using the copy button</li>
-                  <li>Share your User ID with a coach</li>
-                  <li>The coach will add you to their team using your User ID</li>
-                  <li>Once added, your team information will appear here</li>
-                </ol>
-                <div className="instruction-note">
-                  <strong>Note:</strong> Only coaches can add players to teams. Contact a coach to get started!
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-icon">👥</div>
-            <div className="stat-content">
-              <h3>Total Players</h3>
-              <p className="stat-number">{stats.totalPlayers}</p>
-            </div>
-          </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">✅</div>
-            <div className="stat-content">
-              <h3>Active Players</h3>
-              <p className="stat-number">{stats.activePlayers}</p>
-            </div>
-          </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">🏀</div>
-            <div className="stat-content">
-              <h3>Total Games</h3>
-              <p className="stat-number">{stats.totalGames}</p>
-            </div>
-          </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">📅</div>
-            <div className="stat-content">
-              <h3>Upcoming Games</h3>
-              <p className="stat-number">{stats.upcomingGames}</p>
-            </div>
-          </div>
-          
-          <div className="stat-card">
-            <div className="stat-icon">🏆</div>
-            <div className="stat-content">
-              <h3>Completed Games</h3>
-              <p className="stat-number">{stats.completedGames}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="dashboard-content">
-          <div className="dashboard-section">
-            <h2>Recent Games</h2>
-            <div className="games-list">
-              {recentGames.length > 0 ? (
-                recentGames.map((game) => (
-                  <div key={game._id} className="game-item">
-                    <div className="game-teams">
-                      <span className="team">{game.homeTeam.name}</span>
-                      <span className="score">{game.homeScore.name} - {game.awayScore}</span>
-                      <span className="team">{game.awayTeam}</span>
-                    </div>
-                    <div className="game-meta">
-                      <span className="date">{formatDate(game.gameDate)}</span>
-                      <span className={`status ${game.status}`}>
-                        {game.status.replace('_', ' ').toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="no-data">No recent games found.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="dashboard-section">
-            <h2>Top Scorers</h2>
-            <div className="players-list">
-              {topPlayers.length > 0 ? (
-                topPlayers.map((player, index) => (
-                  <div key={player._id} className="player-item">
-                    <div className="player-rank">#{index + 1}</div>
-                    <div className="player-info">
-                      <h4>{player.name}</h4>
-                      <p>{player.team.name} • {player.position}</p>
-                    </div>
-                    <div className="player-stats">
-                      <span className="ppg">{player.stats.pointsPerGame.toFixed(1)} PPG</span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="no-data">No player data available.</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="quick-actions">
-          <h2>Quick Actions</h2>
-          <div className="actions-grid">
-            <button className="action-btn">
-              <span className="action-icon">➕</span>
-              <span>Add Player</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">🏀</span>
-              <span>Schedule Game</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">📊</span>
-              <span>View Statistics</span>
-            </button>
-            <button className="action-btn">
-              <span className="action-icon">⚙️</span>
-              <span>Settings</span>
-            </button>
-          </div>
-        </div>
+    <div className="dashboard-page">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Welcome{user?.name ? `, ${user.name}` : ''}!</h1>
+        <p className="dashboard-sub">Overview of teams, players and live games.</p>
       </div>
+
+      <section className="dashboard-grid">
+        <div className="card userid-card">
+          <h3>Your User ID</h3>
+          <p className="muted">Use this ID when needed — copy to clipboard</p>
+          <div className="userid-row">
+            <code className="userid-value">{user?.id ?? '—'}</code>
+            <button className="btn-copy" onClick={handleCopyId}>
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+        </div>
+        <div className="card stat">
+          <h3>Teams</h3>
+          <p className="big">{teamsCount === null ? '—' : teamsCount}</p>
+          <p className="muted">Total teams</p>
+        </div>
+
+        <div className="card stat">
+          <h3>Players</h3>
+          <p className="big">{playersCount === null ? '—' : playersCount}</p>
+          <p className="muted">Total players</p>
+        </div>
+
+        <div className="card stat">
+          <h3>Live Games</h3>
+          <p className="big">{gamesCount === null ? '—' : gamesCount}</p>
+          <p className="muted">Ongoing</p>
+        </div>
+
+        <div className="card recent">
+          <h3>Recent Activity</h3>
+          <ul className="activity-list">
+            <li>No recent activity yet</li>
+          </ul>
+        </div>
+      </section>
     </div>
   );
 };
 
 export default Dashboard;
-

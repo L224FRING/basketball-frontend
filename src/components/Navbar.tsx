@@ -28,19 +28,23 @@ const Navbar: React.FC = () => {
 
         <div className={`navbar-menu ${isOpen ? 'active' : ''}`}>
           <Link to="/" className="navbar-link">Home</Link>
-          <Link to="/players" className="navbar-link">Players</Link>
-          <Link to="/games" className="navbar-link">Games</Link>
-          <Link to="/teams" className="navbar-link">Teams</Link>
 
           {user ? (
-            <div className="navbar-user">
-              <span className="navbar-user-info">
-                Welcome, {user.name} ({user.role})
-              </span>
-              <button onClick={handleLogout} className="navbar-logout">
-                Logout
-              </button>
-            </div>
+            <>
+              <Link to="/dashboard" className="navbar-link">Dashboard</Link>
+              <Link to="/players" className="navbar-link">Players</Link>
+              <Link to="/games" className="navbar-link">Games</Link>
+              <Link to="/teams" className="navbar-link">Teams</Link>
+
+              <div className="navbar-user">
+                <span className="navbar-user-info">
+                  Welcome, {user.name} ({user.role})
+                </span>
+                <button onClick={handleLogout} className="navbar-logout">
+                  Logout
+                </button>
+              </div>
+            </>
           ) : (
             <div className="navbar-auth">
               <Link to="/login" className="navbar-link">Login</Link>
