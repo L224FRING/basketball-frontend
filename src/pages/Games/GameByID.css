@@ -1,47 +1,78 @@
+/* ===============================
+   GameByID - Dark Sporty Theme
+   =============================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
+
 .live-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: #fff;
-  font-family: 'Arial', sans-serif;
-}
-
-.scoreboard {
-  background-color: #0b1e3b;
   padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, #000814 0%, #001d3d 60%, #ff7b22 120%);
+  color: #f1f1f1;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Scoreboard Card */
+.scoreboard {
+  background: linear-gradient(145deg, #0d1b2a, #1b263b);
+  border: 1px solid rgba(255, 145, 77, 0.2);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(255, 123, 34, 0.2);
+  padding: 2.5rem;
+  width: 95%;
+  max-width: 850px;
   text-align: center;
-  width: 90%;
-  max-width: 800px;
+  transition: all 0.3s ease;
 }
 
+.scoreboard:hover {
+  box-shadow: 0 8px 40px rgba(255, 145, 77, 0.35);
+}
+
+/* Title + Viewer Count */
 .game-title {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  color: #ffb36b;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
   letter-spacing: 1px;
-  color: #ffc107;
 }
 
+.viewer-count {
+  font-size: 1rem;
+  color: #00ff99;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+/* Team Score Layout */
 .score-row-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
   margin-bottom: 1.5rem;
 }
 
 .team-block {
   flex: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 145, 77, 0.1);
 }
 
 .team-block h2 {
-  margin-bottom: 0.5rem;
   font-size: 1.5rem;
+  color: #ffb36b;
+  margin-bottom: 0.75rem;
 }
 
+/* Score Row + Buttons */
 .score-row {
   display: flex;
   justify-content: center;
@@ -50,75 +81,128 @@
 }
 
 .score-number {
-  font-size: 2.5rem;
-  font-weight: bold;
-  width: 60px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  width: 80px;
+  text-shadow: 0 0 8px rgba(255, 145, 77, 0.6);
 }
 
 .score-row button {
-  padding: 0.5rem 1rem;
-  font-size: 1.2rem;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #ff914d 0%, #ff7b22 100%);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
   border: none;
+  border-radius: 10px;
+  padding: 0.5rem 1.2rem;
   cursor: pointer;
-  transition: 0.2s;
+  box-shadow: 0 4px 14px rgba(255, 145, 77, 0.3);
+  transition: all 0.25s ease-in-out;
 }
 
 .score-row button:hover {
-  background-color: #ffc107;
-  color: #0b1e3b;
+  background: linear-gradient(135deg, #ff7b22 0%, #ff914d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 145, 77, 0.5);
 }
 
+/* VS block */
 .vs-block {
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding: 0 1rem;
-  color: #ff5722;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #ff7b22;
+  text-shadow: 0 0 10px rgba(255, 123, 34, 0.6);
 }
 
-.status, .venue, .date, .connection-status {
+/* Status & Info */
+.status,
+.venue,
+.date {
   margin: 0.5rem 0;
+  color: #b8c1ec;
+  font-size: 1rem;
+}
+
+.status strong {
+  color: #ffb36b;
+}
+
+/* Connection Indicator */
+.connection-status {
+  margin-top: 0.5rem;
+  font-weight: 500;
 }
 
 .connection-status.online {
-  color: #00ff00;
+  color: #00ff99;
 }
 
 .connection-status.offline {
   color: #ff4d4d;
 }
 
+/* Action Buttons */
 .actions {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 10px;
   border: none;
+  border-radius: 10px;
+  padding: 0.8rem 1.6rem;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .disconnect {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
   color: #fff;
+  box-shadow: 0 4px 10px rgba(30, 60, 114, 0.3);
 }
 
 .disconnect:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  transform: translateY(-2px);
 }
 
 .end-game {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #ff4d4d 0%, #c92a36 100%);
   color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4);
 }
 
 .end-game:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #c92a36 0%, #ff4d4d 100%);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scoreboard {
+    padding: 1.5rem;
+  }
+
+  .game-title {
+    font-size: 1.6rem;
+  }
+
+  .score-number {
+    font-size: 2.2rem;
+  }
+
+  .score-row button {
+    font-size: 1.1rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .vs-block {
+    margin: 1rem 0;
+  }
 }
 

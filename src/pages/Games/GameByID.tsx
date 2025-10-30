@@ -16,6 +16,7 @@ const GameByID: React.FC = () => {
 
   const [game, setGame] = useState<Game | null>(null);
   const [connected, setConnected] = useState(false);
+  const [viewerCount, setViewerCount] = useState<number>(0);
 
   const canEdit = user?.role === "admin" || user?.role === "coach";
 
@@ -27,6 +28,8 @@ const GameByID: React.FC = () => {
     socket.on("connect", () => setConnected(true));
     socket.on("disconnect", () => setConnected(false));
     socket.on("gameUpdated", (updatedGame: Game) => setGame(updatedGame));
+    socket.on("viewerCountUpdated", (count: number) => setViewerCount(count));
+
 
     fetch(`http://localhost:5000/api/games/${id}`)
       .then((res) => res.json())
@@ -34,6 +37,7 @@ const GameByID: React.FC = () => {
 
     return () => {
       socket.off("gameUpdated");
+      socket.off("viewerCountUpdated");
       socket.emit("leaveGame", id);
     };
   }, [id]);
@@ -85,6 +89,7 @@ const GameByID: React.FC = () => {
     <div className="live-container">
       <div className="scoreboard">
         <h1 className="game-title">🏀 {game.homeTeam?.name} vs {game.awayTeam?.name}</h1>
+        <p className="viewer-count">👀 {viewerCount} watching live</p>
 
         <div className="score-row-container">
           <div className="team-block home-team">

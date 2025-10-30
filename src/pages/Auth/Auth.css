@@ -1,40 +1,56 @@
+/* ===============================
+   AUTH PAGE - DARK THEME
+   =============================== */
+
+/* Fullscreen Centering */
 .auth-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at top, #0d1b2a 0%, #000814 80%);
   padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: #e0e0e0;
 }
 
+/* Card */
 .auth-card {
-  background: white;
+  background: linear-gradient(145deg, rgba(20, 30, 48, 0.95), rgba(36, 59, 85, 0.95));
   padding: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 145, 77, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 500px;
+  backdrop-filter: blur(6px);
 }
 
+/* Header */
 .auth-card h2 {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #ffb36b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(255, 145, 77, 0.6);
 }
 
 .auth-card p {
   text-align: center;
-  color: #666;
+  color: #ccc;
   margin-bottom: 2rem;
 }
 
+/* Form Layout */
 .auth-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+/* Labels & Inputs */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -43,34 +59,39 @@
 .form-group label {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #ffb36b;
 }
 
 .form-group input,
 .form-group select {
   padding: 0.75rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid rgba(255, 145, 77, 0.3);
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f0f0f0;
+  transition: all 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #ff914d;
+  background: rgba(255, 145, 77, 0.1);
 }
 
+/* Error Message */
 .error-message {
-  background-color: #fee;
-  color: #c33;
-  padding: 0.75rem;
+  background-color: rgba(230, 57, 70, 0.2);
+  color: #ffb3b3;
+  border: 1px solid rgba(230, 57, 70, 0.3);
   border-radius: 8px;
-  border: 1px solid #fcc;
+  padding: 0.75rem;
   text-align: center;
   margin-bottom: 1rem;
 }
 
+/* Buttons */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -82,37 +103,42 @@
 }
 
 .btn-primary {
-  background-color: #667eea;
+  background: linear-gradient(135deg, #ff7b22, #ff914d);
   color: white;
+  box-shadow: 0 4px 14px rgba(255, 145, 77, 0.4);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #5a6fd8;
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 145, 77, 0.6);
 }
 
 .btn-primary:disabled {
-  background-color: #ccc;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
 
+/* Auth Switch (Login/Register links) */
 .auth-switch {
   text-align: center;
   margin-top: 1.5rem;
-  color: #666;
+  color: #ccc;
 }
 
 .auth-switch a {
-  color: #667eea;
+  color: #ff914d;
   text-decoration: none;
   font-weight: 600;
+  transition: color 0.2s ease;
 }
 
 .auth-switch a:hover {
   text-decoration: underline;
+  color: #ffb36b;
 }
 
+/* Mobile Adjustments */
 @media (max-width: 768px) {
   .auth-container {
     padding: 1rem;
@@ -123,7 +149,7 @@
   }
   
   .auth-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 }
 
