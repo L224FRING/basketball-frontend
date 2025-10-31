@@ -63,7 +63,13 @@ const Teams: React.FC = () => {
   };
 
   const canManageTeam = (team: Team) => {
-    return user?.role === 'admin' || (user?.role === 'coach' && team.coach._id === user.id);
+    if (user?.role === 'admin') return true;
+    if (user?.role === 'coach') {
+      // team.coach may be populated object or an id (or undefined). Compare safely.
+      const coachId = (team as any).coach?._id ?? (team as any).coach;
+      return coachId && coachId.toString() === user.id;
+    }
+    return false;
   };
 
   if (loading) {
@@ -130,7 +136,10 @@ const Teams: React.FC = () => {
             
             <div className="team-content">
               <div className="team-info">
-                <p><strong>Coach:</strong> {team.coach.name}</p>
+                <p>
+                  <strong>Coach:</strong>{' '}
+                  {team.coach ? ((team.coach as any).name ?? 'Assigned') : 'Unassigned'}
+                </p>
                 {team.description && <p><strong>Description:</strong> {team.description}</p>}
                 {team.foundedYear && <p><strong>Founded:</strong> {team.foundedYear}</p>}
                 {team.homeVenue && <p><strong>Home Venue:</strong> {team.homeVenue}</p>}

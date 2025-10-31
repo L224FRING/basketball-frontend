@@ -1,5 +1,7 @@
 import { Team } from "../../types/team";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from '../../context/AuthContext';
+import { teamsAPI } from '../../services/api';
 
 interface TeamFormProps {
   team?: Team | null;
@@ -8,7 +10,16 @@ interface TeamFormProps {
 }
 
 export const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
+  interface FormState {
+    name: string;
+    description: string;
+    foundedYear: string | number | '';
+    homeVenue: string;
+    colors: { primary: string; secondary: string };
+    coach: string;
+  }
+
+  const [formData, setFormData] = useState<FormState>({
     name: team?.name || '',
     description: team?.description || '',
     foundedYear: team?.foundedYear || '',
@@ -16,8 +27,25 @@ export const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onCancel }) 
     colors: {
       primary: team?.colors?.primary || '#000000',
       secondary: team?.colors?.secondary || '#FFFFFF'
-    }
+    },
+    coach: typeof team?.coach === 'string' ? (team.coach as string) : (team?.coach?._id || '')
   });
+
+  const { user } = useAuth();
+  const [coaches, setCoaches] = useState<Array<any>>([]);
+
+  useEffect(() => {
+    const loadCoaches = async () => {
+      if (user?.role !== 'admin') return;
+      try {
+        const res = await teamsAPI.getCoaches();
+        setCoaches(res.data?.data || []);
+      } catch (err) {
+        console.error('Failed to load coaches', err);
+      }
+    };
+    loadCoaches();
+  }, [user]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +56,9 @@ export const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onCancel }) 
     onSubmit(data);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+    const { name, value } = target;
     if (name.startsWith('colors.')) {
       const colorKey = name.split('.')[1];
       setFormData(prev => ({
@@ -100,6 +129,18 @@ export const TeamForm: React.FC<TeamFormProps> = ({ team, onSubmit, onCancel }) 
               />
             </div>
           </div>
+
+          {user?.role === 'admin' && (
+            <div className="form-group">
+              <label htmlFor="coach">Assign Coach</label>
+              <select id="coach" name="coach" value={formData.coach} onChange={handleChange}>
+                <option value="">Unassigned</option>
+                {coaches.map(c => (
+                  <option key={c._id} value={c._id}>{c.name} ({c.email})</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div className="form-row">
             <div className="form-group">

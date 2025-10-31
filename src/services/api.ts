@@ -70,6 +70,7 @@ export const teamsAPI = {
   getTeam: (id: string) => api.get(`/api/teams/${id}`),
   createTeam: (teamData: any) => api.post('/api/teams', teamData),
   updateTeam: (id: string, teamData: any) => api.put(`/api/teams/${id}`, teamData),
+  getCoaches: () => api.get('/api/teams/coaches'),
   deleteTeam: (id: string) => api.delete(`/api/teams/${id}`),
   addPlayerToTeam: (teamId: string, playerId: string) => 
     api.post(`/api/teams/${teamId}/players`, { playerId }),
