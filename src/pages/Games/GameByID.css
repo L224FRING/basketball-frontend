@@ -15,6 +15,15 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* Ensure the app main wrapper uses the same background so content container shows it */
+.main-content {
+  background: linear-gradient(135deg, #000814 0%, #001d3d 60%, #ff7b22 120%);
+}
+
+.live-container .container {
+  background: transparent;
+}
+
 /* Scoreboard Card */
 .scoreboard {
   background: linear-gradient(145deg, #0d1b2a, #1b263b);

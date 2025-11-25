@@ -7,6 +7,15 @@
   color: #f5f6fa;
 }
 
+/* Ensure the app main wrapper uses this background so .container doesn't block it */
+.main-content {
+  background: radial-gradient(circle at top left, #111827, #0a0f1f 70%);
+}
+
+.home .container {
+  background: transparent;
+}
+
 /* ------------------------------
    HERO SECTION
 --------------------------------*/
@@ -45,6 +54,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   background: linear-gradient(90deg, #ffb36b, #ffdcb2);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -196,6 +206,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   background: linear-gradient(90deg, #ffb36b, #ffdcb2);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

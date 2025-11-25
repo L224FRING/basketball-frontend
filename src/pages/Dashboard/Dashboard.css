@@ -1,18 +1,22 @@
 /* Match the other pages: set a page-level radial background and container background */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-body {
-  background: radial-gradient(circle at top, #0d1b2a 0%, #000814 80%) !important;
-}
-
 .dashboard-page {
   padding: 2rem;
   color: #e0e0e0;
-  background: radial-gradient(circle at top, #0d1b2a 0%, #000814 80%);
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Ensure layout main has the same background so .container remains transparent */
+.main-content {
+  background: radial-gradient(circle at top, #0d1b2a 0%, #000814 80%);
+}
+
+.dashboard-page .container {
+  background: transparent;
 }
 
 .dashboard-header {

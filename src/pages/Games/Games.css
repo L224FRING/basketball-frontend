@@ -11,6 +11,15 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* Ensure the app main wrapper uses this background so inner .container stays transparent */
+.main-content {
+  background: radial-gradient(circle at top, #0d1b2a 0%, #000814 80%);
+}
+
+.games-container .container {
+  background: transparent;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;

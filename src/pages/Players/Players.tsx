@@ -12,7 +12,6 @@ const Players: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
@@ -100,8 +99,14 @@ const Players: React.FC = () => {
   };
 
   const canManagePlayer = (player: Player) => {
-    return user?.role === 'admin' || 
-           (user?.role === 'coach' && user.managedTeams?.includes(player.team));
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    if (user.role === 'coach') {
+      // player.team may be an object or an id string
+      const teamId = typeof player.team === 'string' ? player.team : player.team?._id;
+      return !!teamId && user.managedTeams?.some((t) => t._id === teamId);
+    }
+    return false;
   };
 
   if (loading) {
@@ -136,20 +141,6 @@ const Players: React.FC = () => {
         )}
 
         {/* Coach Instructions */}
-        {user && (user.role === 'admin' || user.role === 'coach') && (
-          <div className="coach-instructions">
-            <h3>How to Add Players to Teams</h3>
-            <div className="instructions-content">
-              <p>To add a player to a team:</p>
-              <ol>
-                <li>Make sure the player has registered an account with role "player"</li>
-                <li>Ask the player for their User ID (they can find it on their Dashboard)</li>
-                <li>Click "Add Player" and enter the player's User ID and team details</li>
-                <li>The player will automatically be added to the selected team</li>
-              </ol>
-            </div>
-          </div>
-        )}
 
         {editingPlayer && (
           <PlayerForm
@@ -210,13 +201,7 @@ const Players: React.FC = () => {
         <div className="players-grid">
         {players.map((player) => (
           <div key={player._id} className="player-card">
-            {/* Header: Name + Team + Drop Arrow */}
-            <div
-              className="player-header cursor-pointer"
-              onClick={() =>
-                setExpanded(expanded === player._id ? null : player._id)
-              }
-            >
+            <div className="player-header">
               <div>
                 <h3 className="font-bold">{player.name}</h3>
                 <div style={{display: 'flex', gap: '0.75rem', alignItems: 'center'}}>
@@ -229,58 +214,10 @@ const Players: React.FC = () => {
                 </div>
               </div>
 
-              {/* Drop arrow (rotates when open) */}
-              <span
-                className={`drop-arrow ${expanded === player._id ? "open" : ""}`}
-              >
-                ▼
-              </span>
-            </div>
-
-            {/* Dropdown Content */}
-            {expanded === player._id && (
-              <div className="mt-3 space-y-2 text-sm animate-slide">
-                <div className="info-item">
-                  <span className="label font-medium">User:</span>{" "}
-                  <span>{player.user?.name || "N/A"}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label font-medium">Position:</span>{" "}
-                  <span>{player.position}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label font-medium">Jersey:</span>{" "}
-                  <span>#{player.jerseyNumber}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label font-medium">Height:</span>{" "}
-                  <span>{player.height}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label font-medium">Weight:</span>{" "}
-                  <span>{player.weight} lbs</span>
-                </div>
-                <div className="info-item">
-                  <span className="label font-medium">Age:</span>{" "}
-                  <span>{player.age}</span>
-                </div>
-
-                {/* Stats */}
-                <div className="player-stats">
-                  <h4 className="font-semibold mt-2">Season Stats</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>Total PTS: {player.points ?? 0}</div>
-                    <div>PPG: {player.stats.pointsPerGame.toFixed(1)}</div>
-                    <div>RPG: {player.stats.reboundsPerGame.toFixed(1)}</div>
-                    <div>APG: {player.stats.assistsPerGame.toFixed(1)}</div>
-                    <div>SPG: {player.stats.stealsPerGame.toFixed(1)}</div>
-                    <div>BPG: {player.stats.blocksPerGame.toFixed(1)}</div>
-                  </div>
-                </div>
-
-                {/* Actions (Admin/Coach only) */}
+              {/* Actions always visible (if permitted) */}
+              <div className="player-actions">
                 {canManagePlayer(player) && (
-                  <div className="player-actions flex gap-2 mt-2">
+                  <>
                     <button
                       className="btn btn-sm btn-secondary"
                       onClick={() => setEditingPlayer(player)}
@@ -290,13 +227,38 @@ const Players: React.FC = () => {
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDeletePlayer(player._id)}
+                      style={{marginLeft: '0.5rem'}}
                     >
                       Delete
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
-            )}
+            </div>
+
+            {/* Always-visible content (no expand) */}
+            <div className="mt-3 space-y-2 text-sm">
+                <span className="label font-medium">Position:</span>{" "}
+                <span>{player.position}</span>
+              </div>
+              <div className="info-item">
+                <span className="label font-medium">Jersey:</span>{" "}
+                <span>#{player.jerseyNumber}</span>
+              </div>
+              <div className="info-item">
+                <span className="label font-medium">Height:</span>{" "}
+                <span>{player.height}</span>
+              </div>
+              <div className="info-item">
+                <span className="label font-medium">Weight:</span>{" "}
+                <span>{player.weight} lbs</span>
+              </div>
+              <div className="info-item">
+                <span className="label font-medium">Age:</span>{" "}
+                <span>{player.age}</span>
+              </div>
+
+              {/* Stats (condensed) */}
           </div>
         ))}
         </div>

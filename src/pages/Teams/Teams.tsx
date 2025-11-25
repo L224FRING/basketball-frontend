@@ -145,11 +145,6 @@ const Teams: React.FC = () => {
                 {team.homeVenue && <p><strong>Home Venue:</strong> {team.homeVenue}</p>}
               </div>
               
-              <div className="team-stats">
-                <h4>Record</h4>
-                <p>{team.stats.wins}W - {team.stats.losses}L</p>
-                <p>Win %: {(team.stats.winPercentage * 100).toFixed(1)}%</p>
-              </div>
               
               <div className="team-players">
                 <h4>Players ({team.players.length})</h4>
